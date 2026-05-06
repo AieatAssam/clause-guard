@@ -79,7 +79,7 @@ const RED_FLAG_PATTERNS = [
     severity: 'critical',
     label: 'Indemnity Carved Out of Liability Cap',
     patterns: [
-      /(?:indemnif|indemnity)\s+(?:obligations?|claims?)\s+(?:shall|will)\s+(?:not\s+be\s+)?(?:subject\s+to|limited\s+by)\b(?:\s+the\s+)?(?:limitation|cap)/i,
+      /(?:indemnif(?:ication)?|indemnity)\s+(?:obligations?|claims?)\s+(?:shall|will)\s+(?:not\s+be\s+)?(?:subject\s+to|limited\s+by)\b(?:\s+the\s+)?(?:limitation|cap)/i,
       /(?:limitation\s+of\s+liability|liability\s+cap).{0,80}?(?:shall\s+)?(?:not\s+)?apply\s+to.{0,20}?(?:indemnif|indemnity)/i,
     ],
     description: `Indemnity claims are specifically excluded from the contract's liability cap — they're unlimited.`,
@@ -98,7 +98,7 @@ const RED_FLAG_PATTERNS = [
     severity: 'medium',
     label: 'Broad Consequential Damages Exclusion',
     patterns: [
-      /\bconsequential\s+(?:damages|loss)\b.{0,10}?\b(?:lost\s+profits|loss\s+of\s+(?:revenue|business|data|opportunity))\b/i,
+      /\bconsequential\s+(?:damages|loss)\b(?:.{0,10}?\b(?:lost\s+profits|loss\s+of\s+(?:revenue|business|data|opportunity))\b)?/i,
       /\bIN\s+NO\s+EVENT\s+(?:SHALL|WILL)\s+(?:.{0,60}?)\s?BE\s+LIABLE\s+FOR\s+(?:ANY|CONSEQUENTIAL)\b.{0,30}?DAMAGES\b/i,
     ],
     description: `No liability for consequential/indirect damages — covers lost profits, lost revenue, lost data.`,
@@ -113,7 +113,7 @@ const RED_FLAG_PATTERNS = [
     severity: 'medium',
     label: 'Low Aggregate Liability Cap',
     patterns: [
-      /(?:aggregate|total|maximum)\s+(?:liability|damages)\s+(?:shall|is|will)\s+(?:not\s+)?exceed\s+(?:the\s+)?(?:fees\s+(?:paid|payable)|(?:US?\$)?\d{1,4}(?:[.,]\d+)?(?:\s*(?:k|K|thousand|million|M))?)\s/i,
+      /(?:aggregate|total|maximum)\s+(?:liability|damages)\s+(?:shall|is|will)\s+(?:not\s+)?exceed\s+(?:the\s+)?(?:fees\s+(?:paid|payable)|(?:US?\$)?\d{1,4}(?:[.,]\d+)?(?:\s*(?:k|K|thousand|million|M))?)\b/i,
     ],
     description: `Total liability is capped at fees paid or a low fixed amount (e.g. $50–$1,000).`,
     whyRisky: `For a small contract, the cap may be far below the actual harm they could cause.`,
@@ -246,7 +246,7 @@ const RED_FLAG_PATTERNS = [
     severity: 'critical',
     label: 'Pay-If-Paid / Pay-When-Paid',
     patterns: [
-      /\b(?:payable|payment|paid)\s+(?:when|upon|if|only\s+if|conditional\s+(?:upon|on))\s+(?:and\s+when\s+)?(?:(?:our|your|the)\s+)?(?:client|customer|owner|receipt)\s+(?:is\s+)?(?:paid|receives?|received)\b/i,
+      /\b(?:payable|payment|paid)\b.{0,30}?(?:when|upon|if|only\s+if|conditional\s+(?:upon|on))\s+(?:(?:our|your|the)\s+)?(?:receipt|collection)\s+(?:of|from)\b/i,
       /\bno\s+(?:obligation|liability)\s+(?:to\s+)?pay\s+(?:until|unless|except)\b.{0,60}?\b(?:paid|received|collected)\b/i,
       /\bpay-when-paid\b|\bpay-if-paid\b/i,
     ],
@@ -281,7 +281,7 @@ const RED_FLAG_PATTERNS = [
     severity: 'medium',
     label: 'All Fees Non-Refundable',
     patterns: [
-      /\b(?:all|any)\s+fees?(?:\s+paid|\s+hereunder)?\s+(?:are|shall\s+be|will\s+be)\s+(?:non-?refundable|nonrefundable)\b/i,
+      /\b(?:all|any)\s+fees?\s.{0,20}?(?:are|shall\s+be|will\s+be)\s+(?:non-?refundable|nonrefundable)\b/i,
       /\bnon-?refundable\s+(?:fee|deposit|payment|retainer)\b/i,
     ],
     description: `All fees paid are non-refundable, regardless of whether the service is delivered.`,
@@ -364,8 +364,8 @@ const RED_FLAG_PATTERNS = [
     label: 'Broad Non-Compete (Geography + Duration)',
     patterns: [
       /\b(?:non-?compete|noncompete)\b.{0,60}?\b(\d+)\s+(?:month|year|years?)\b/i,
-      /\b(?:shall|will|agree(?:s)?\s+not\s+to)\s+(?:directly\s+or\s+indirectly)\s+(?:own|manage|operate|invest\s+in|be\s+employed\s+by|consult).{0,60}?\bcompetitor\b/i,
-      /\b(?:for\s+)?(\d+)\s+(?:month|year|years?)\s+(?:after|following|subsequent\s+to).{0,40}?\b(?:compete|solicit|engage)\b/i,
+      /\b(?:(?:shall|will)\s+not\s+|agree(?:s)?\s+not\s+(?:to\s+)?)(?:directly\s+or\s+indirectly)\s+(?:own|manage|operate|invest\s+in|be\s+employed\s+by|consult).{0,60}?\bcompetitor\b/i,
+      /\b(?:for\s+)?(\d+)\s+(?:months?|years?)\s+(?:after|following|subsequent\s+to).{0,40}?\b(?:compete|solicit|engage)\b/i,
     ],
     description: `Restricts you from working with competitors for a defined period (often 6-24 months) after the contract ends.`,
     whyRisky: `Can prevent you from working in your entire field. Enforceability varies by jurisdiction (illegal in California, restricted in UK/EU). Even if unenforceable, used to intimidate.`,
@@ -379,7 +379,7 @@ const RED_FLAG_PATTERNS = [
     severity: 'medium',
     label: 'Overbroad Non-Solicit (All Employees)',
     patterns: [
-      /(?:shall|will|agree\s+not\s+to)\s+(?:solicit|hire|recruit|induce)\s+(?:any\s+)?(?:employee|contractor|personnel|staff|worker)\s+(?:of|from)\s+(?:the\s+)?(?:company|client|customer|other\s+party)\b/i,
+      /(?:shall|will)\s+not\s+(?:solicit|hire|recruit|induce)|agree\s+not\s+(?:to\s+)?(?:solicit|hire|recruit|induce)\s+(?:any\s+)?(?:employee|contractor|personnel|staff|worker)\s+(?:of|from)\s+(?:the\s+)?(?:company|client|customer|other\s+party)\b/i,
     ],
     description: `You cannot hire or solicit ANY of their employees — not just those you worked with.`,
     whyRisky: `Could prevent you from hiring anyone who ever worked there. "Indirectly" hiring via an agency could also be caught.`,
@@ -416,7 +416,7 @@ const RED_FLAG_PATTERNS = [
     severity: 'high',
     label: 'Force Majeure Excuses Them, Not Your Payment',
     patterns: [
-      /force\s+majeure.{0,80}?(?:payment\s+obligations?\s+(?:shall|are)\s+(?:not\s+)?(?:be\s+)?(?:excused|suspended)|not\s+(?:be\s+)?excused)/i,
+      /force\s+majeure.{0,80}?(?:payment\s+obligations?\s+(?:shall|are)\s+(?:not\s+)?(?:be\s+)?(?:excused|suspended)|not\s+(?:be\s+)?excuse(?:d)?)/i,
     ],
     description: `Force majeure lets them stop providing services during unexpected events, but you still have to pay.`,
     whyRisky: `You're paying for nothing during the force majeure period. Creates a one-sided advantage.`,
@@ -453,7 +453,7 @@ const RED_FLAG_PATTERNS = [
     label: 'Unlimited Audit Rights (At Your Cost)',
     patterns: [
       /\baudit\b.{0,60}?\b(?:at\s+(?:your|the\s+)?(?:cost|expense)|(?:cost|expense)\s+(?:of|to\s+be\s+(?:borne|paid)\s+by)\s+(?:you|the\s+(?:licensee|contractor|provider)))\b/i,
-      /\bright\s+(?:to\s+)?(?:audit|inspect|examine)\s+(?:all|any)\s+(?:books?|records?|accounts?|systems?)\s+(?:at\s+)?(?:any\s+time|upon\s+demand)\b/i,
+      /\bright\s+(?:to\s+)?(?:audit|inspect|examine)\s+(?:all|any)\s+(?:your\s+)?(?:books?|records?|accounts?|systems?)\s+(?:at\s+)?(?:any\s+time|upon\s+demand)\b/i,
     ],
     description: `The other party can audit your records at any time, and you pay for it — deducted from your fees.`,
     whyRisky: `Unlimited audits can be used as harassment. At your expense, you're paying them to audit you. No frequency limit means constant disruption.`,
@@ -500,7 +500,7 @@ const RED_FLAG_PATTERNS = [
     severity: 'high',
     label: 'Non-Disparagement (No Truthful Exception)',
     patterns: [
-      /\b(?:shall|will|agree(?:s)?\s+not\s+to)\s+(?:disparage|denigrate|defame|make\s+negative\s+(?:statements?|comments?))\b(?!(?:.{0,300}?\b(?:truthful|honest|legal|required\s+by\s+law|regulatory|proceeding|proceeding)\b))/i,
+      /\b(?:shall\s+not|will\s+not|agree(?:s)?\s+not\s+to)\s+(?:disparage|denigrate|defame|make\s+(?:any\s+)?negative\s+(?:statements?|comments?))\b(?!(?:.{0,300}?\b(?:truthful|honest|legal|required\s+by\s+law|regulatory|proceeding|proceeding)\b))/i,
     ],
     description: `Prohibits you from saying anything negative about them — with no exception for truthful statements.`,
     whyRisky: `Even honest feedback or reviews could violate this clause. Can silence whistleblowers.`,
@@ -543,7 +543,7 @@ const RED_FLAG_PATTERNS = [
     severity: 'critical',
     label: 'Heavy Early Termination Penalty',
     patterns: [
-      /\b(?:early\s+)?termination\b.{0,30}?(?:fee|penalty|charge|payment).{0,40}?\b(?:remaining|unpaid|outstanding)\s+(?:balance|amount|fees?|payments?)\b/i,
+      /\b(?:early\s+)?termination\b.{0,30}?(?:fee|penalty|charge|pay(?:ment)?).{0,40}?\b(?:remaining|unpaid|outstanding)\s+(?:balance|amount|fees?|payments?)\b/i,
       /\b(?:shall|will)\s+(?:be\s+)?(?:liable|obligated)\s+(?:for\s+)?(?:the\s+)?(?:full|entire|remaining)\s+(?:amount|value|balance|fees?)\s+(?:of\s+)?(?:the\s+)?(?:agreement|contract|term)\b/i,
       /\baccelerated?\s+(?:payment|balance|amount|fees?)\b.{0,40}?\b(?:termination|cancel)/i,
     ],
@@ -559,7 +559,7 @@ const RED_FLAG_PATTERNS = [
     severity: 'high',
     label: 'Acceptance at Their Sole Discretion',
     patterns: [
-      /\b(?:sole|absolute)\s+(?:discretion|judgment|satisfaction)\s+(?:to\s+)?(?:reject|accept|approve|refuse)\s+(?:any|the)\s+(?:work|deliverable|product|output)\b/i,
+      /\b(?:sole|absolute)\s+(?:discretion|judgment|satisfaction)\s+(?:to\s+)?(?:reject|accept|approve|refuse)\s+(?:any|the)\s+(?:work|deliverable|product|output|application)\b/i,
       /\bacceptance\s+(?:criteria|standard|procedure|process)\s+(?:shall\s+)?(?:be\s+)?(?:determined|established|set)\s+(?:by|solely\s+by)\s+(?:the\s+)?(?:client|customer|company)\b/i,
     ],
     description: `They can reject your work based on their "sole satisfaction" with no objective criteria — no limit on revisions.`,
@@ -574,7 +574,7 @@ const RED_FLAG_PATTERNS = [
     severity: 'high',
     label: 'Subcontracting Without Your Consent',
     patterns: [
-      /\b(?:may|can|reserv(?:e|es|ed)\s+the\s+right\s+to)\s+(?:subcontract|delegate|outsource)\s+(?:any|all|part\s+of)\s+(?:the\s+)?(?:work|services|obligations?)\s+(?:without\s+)?(?:your|prior|our|the\s+client's)\s+(?:written\s+)?(?:consent|approval|authorization)\b/i,
+      /\b(?:may|can|reserv(?:e|es|ed)\s+the\s+right\s+to)\s+(?:subcontract|delegate|outsource)\s+(?:any|all|part\s+of)\s.{0,50}?\bwithout\s+(?:your|prior|our|the\s+client's)\s+(?:written\s+)?(?:prior\s+)?(?:consent|approval|authorization)\b/i,
     ],
     description: `They can subcontract your work to anyone without asking you.`,
     whyRisky: `You hired a specific company for their expertise — subcontracting means someone else may do the actual work. No recourse if the subcontractor is incompetent.`,
@@ -588,7 +588,7 @@ const RED_FLAG_PATTERNS = [
     severity: 'high',
     label: 'Unlimited Complimentary Revisions',
     patterns: [
-      /\b(?:unlimited|complimentary|free|no\s+additional\s+(?:charge|cost|fee))\s+(?:revision|iteration|round|changes?)\b/i,
+      /\b(?:unlimited|complimentary|free|no\s+additional\s+(?:charge|cost|fee))\s.{0,30}?(?:revisions?|iteration|round|changes?)\b/i,
     ],
     description: `Revisions are included at no additional cost with no limit. Sounds good but is a trap.`,
     whyRisky: `"Unlimited revisions" means the client can keep requesting changes forever. All your profit disappears into unbillable revision cycles.`,
@@ -616,7 +616,7 @@ const RED_FLAG_PATTERNS = [
     severity: 'high',
     label: 'Minimum Spend or Commitment',
     patterns: [
-      /\bminimum\s+(?:commitment|spend|volume|purchase|guarantee|revenue|fee|charge)\s+(?:of\s+)?\$?[\d,]+[kK]?\s+(?:per\s+)?(?:month|quarter|year|annually)/i,
+      /\bminimum\s.{0,20}?(?:commitment|spend|volume|purchase|guarantee|revenue|fee|charge)\s+(?:of\s+)?\$?[\d,]+[kK]?\s+(?:per\s+)?(?:month|quarter|year|annually)/i,
       /\btake-or-pay\b/i,
     ],
     description: `You must spend a minimum amount per period regardless of whether you need the service.`,
