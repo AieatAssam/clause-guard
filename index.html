@@ -60,7 +60,7 @@
           <div class="input-card-header">
             <div class="input-card-tabs">
               <button class="input-tab active" data-tab="paste" onclick="switchInputTab('paste')">📝 Paste Text</button>
-              <button class="input-tab" data-tab="sample" onclick="loadSample()">📋 Load Sample</button>
+              <button class="input-tab" data-tab="sample" onclick="switchInputTab('sample')">📋 Load Sample</button>
             </div>
             <div class="input-card-actions">
               <span class="word-count" id="wordCount">0 words</span>
@@ -71,6 +71,9 @@
             <textarea id="contractInput" class="contract-input"
               placeholder="Paste your contract text here...&#10;&#10;For best results, include the entire contract.&#10;Cmd/Ctrl+Enter to scan."
               oninput="updateWordCount()" spellcheck="false"></textarea>
+          </div>
+          <div class="input-tab-content" id="tab-sample">
+            <div class="sample-grid" id="sampleGrid"></div>
           </div>
           <div class="input-card-footer">
             <div class="input-hints">
@@ -234,6 +237,7 @@
   </footer>
 
   <!-- ═══ SCRIPTS ═══ -->
+  <script src="data/samples.js"></script>
   <script src="data/patterns-db.js"></script>
   <script src="js/app.js"></script>
   <script src="js/ui.js"></script>

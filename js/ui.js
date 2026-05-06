@@ -47,49 +47,28 @@ function updateWordCount() {
   document.getElementById('wordCount').textContent = `${count.toLocaleString()} words`;
 }
 
-// ═══ SAMPLE ═══
-function loadSample() {
-  const sample = `SaaS MASTER SERVICES AGREEMENT
+// ═══ SAMPLES ═══
+function renderSamples() {
+  const grid = document.getElementById('sampleGrid');
+  if (!grid || !SAMPLE_CONTRACTS) return;
+  grid.innerHTML = SAMPLE_CONTRACTS.map((s, i) => `
+    <div class="sample-card" onclick="loadSample(${i})">
+      <div class="sample-card-icon">${s.icon}</div>
+      <div class="sample-card-name">${escapeHtml(s.name)}</div>
+      <div class="sample-card-desc">${escapeHtml(s.description)}</div>
+      <div class="sample-card-tags">
+        ${s.text.split(/\n\s*\n/).filter(p => p.trim().length > 0).slice(0, 3).map(p => {
+          const title = p.trim().split('\n')[0].replace(/^[\d.\s#]+/, '').substring(0, 30);
+          return `<span class="sample-tag">${escapeHtml(title)}</span>`;
+        }).join('')}
+      </div>
+    </div>`).join('');
+}
 
-This Master Services Agreement (the "Agreement") is entered into by and between TechVantage Inc. ("Company") and the undersigned customer ("Customer").
-
-1. TERM AND AUTO-RENEWAL
-This Agreement shall commence on the Effective Date and continue for an initial term of twelve (12) months. Thereafter, this Agreement shall automatically renew for successive twelve (12) month periods unless either party provides written notice of non-renewal at least sixty (60) days prior to the end of the then-current term. If Customer fails to provide such notice, the Agreement will be deemed renewed.
-
-2. FEES AND PAYMENT
-Customer shall pay all fees as set forth in the applicable Order Form. All fees are non-refundable. Company reserves the right to increase fees upon thirty (30) days written notice. Payment terms are net sixty (60) days from the date of invoice. Customer agrees that time is of the essence for all payment obligations.
-
-3. INDEMNIFICATION
-Customer agrees to indemnify, defend, and hold harmless Company, its affiliates, officers, directors, employees, and agents from and against any and all claims, damages, losses, liabilities, costs, and expenses (including reasonable attorneys' fees) arising out of or relating to Customer's use of the Services, including but not limited to any claim that Customer's content infringes third-party intellectual property rights. This indemnification obligation shall survive any termination of this Agreement and shall not be subject to any limitation of liability set forth herein.
-
-4. LIMITATION OF LIABILITY
-IN NO EVENT SHALL EITHER PARTY BE LIABLE FOR ANY CONSEQUENTIAL, INCIDENTAL, INDIRECT, SPECIAL, EXEMPLARY, OR PUNITIVE DAMAGES, INCLUDING LOST PROFITS, LOSS OF BUSINESS, OR LOSS OF DATA. COMPANY'S TOTAL AGGREGATE LIABILITY UNDER THIS AGREEMENT SHALL NOT EXCEED THE TOTAL FEES PAID BY CUSTOMER IN THE TWELVE (12) MONTHS PRECEDING THE CLAIM. THE FOREGOING LIMITATIONS SHALL NOT APPLY TO: (i) CUSTOMER'S INDEMNIFICATION OBLIGATIONS, (ii) BREACH OF CONFIDENTIALITY, OR (iii) INFRINGEMENT OF INTELLECTUAL PROPERTY RIGHTS.
-
-5. INTELLECTUAL PROPERTY
-All work product, deliverables, software, and materials created by Company for Customer shall be deemed "work made for hire" and shall be the sole and exclusive property of Company. Company grants Customer a non-exclusive, non-transferable, revocable license to use the deliverables solely for Customer's internal business purposes. Customer shall not, directly or indirectly: reverse engineer, decompile, disassemble, modify, create derivative works of, or sublicense any Company intellectual property.
-
-6. CONFIDENTIALITY
-Confidential Information shall include all information disclosed by either party to the other, whether orally or in writing. The receiving party shall hold such information in strict confidence and shall not disclose it to any third party. These obligations shall survive for a period of five (5) years from disclosure. Nothing in this section shall limit either party from seeking injunctive relief, as a breach of this section would cause irreparable harm.
-
-7. DISPUTE RESOLUTION
-Any dispute arising out of or relating to this Agreement shall be resolved through binding arbitration administered by the American Arbitration Association in San Francisco, California. The parties waive any right to a jury trial and agree that any arbitration shall be conducted on an individual basis and not as a class action. This Agreement shall be governed by the laws of the State of California, without regard to its conflict of laws principles.
-
-8. ASSIGNMENT
-Customer may not assign this Agreement or any rights or obligations hereunder without Company's prior written consent. Company may assign this Agreement without Customer's consent to an affiliate or in connection with a merger, acquisition, or sale of all or substantially all assets.
-
-9. TERMINATION
-Company may terminate this Agreement immediately upon written notice if Customer breaches any provision hereof. Customer may terminate this Agreement for convenience upon ninety (90) days written notice. Upon termination for any reason, Customer shall pay all fees and amounts accrued through the termination date, and all rights granted to Customer shall immediately cease.
-
-10. FORCE MAJEURE
-Neither party shall be liable for delays or non-performance caused by events beyond its reasonable control. Notwithstanding the foregoing, payment obligations shall not be excused by any force majeure event.
-
-11. ENTIRE AGREEMENT
-This Agreement constitutes the entire agreement between the parties and supersedes all prior agreements, understandings, negotiations, and discussions, whether oral or written. Customer acknowledges that it has not relied upon any representations or warranties not expressly set forth herein.
-
-12. WARRANTY DISCLAIMER
-THE SERVICES ARE PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED.`;
-
-  document.getElementById('contractInput').value = sample;
+function loadSample(index) {
+  const sample = SAMPLE_CONTRACTS[index];
+  if (!sample) return;
+  document.getElementById('contractInput').value = sample.text;
   switchInputTab('paste');
   updateWordCount();
 }
@@ -351,3 +330,4 @@ document.addEventListener('keydown', e => {
 // ═══ INIT ═══
 initTheme();
 renderLibrary();
+renderSamples();
