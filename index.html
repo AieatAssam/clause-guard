@@ -51,6 +51,10 @@
         auto-renewal traps, broad indemnity, onerous payment terms, and more. 
         Everything runs in your browser. Nothing is uploaded.
       </p>
+      <div class="disclaimer-banner hero-disclaimer">
+        <span class="disclaimer-icon">⚖️</span>
+        <span><strong>Not legal advice.</strong> ClauseGuard is an educational pattern-matching tool. It does not provide legal advice, legal opinions, or legal analysis. Its findings are <strong>suggestions only, not legally enforceable determinations</strong>. Always consult a licensed attorney for contract review. This tool is not comprehensive — absence of a flag does not mean a contract is safe.</span>
+      </div>
       <div class="hero-cta">
         <button class="btn btn-primary btn-lg" onclick="document.getElementById('input-section').scrollIntoView({behavior:'smooth'})">
           ⚡ Start Scanning
@@ -81,6 +85,11 @@
     <div class="section-inner">
       <h2 class="section-title">✏️ Paste Your Contract</h2>
       <p class="section-desc">Paste the full contract text below. Everything stays in your browser — nothing is sent to any server.</p>
+
+      <div class="disclaimer-banner input-disclaimer">
+        <span class="disclaimer-icon">⚠️</span>
+        <span>This tool is <strong>not a substitute for professional legal advice</strong>. Its analysis is <strong>not comprehensive</strong> and its findings are <strong>suggestions only</strong> — they are not legally enforceable determinations. No attorney-client relationship is created. <strong>Consult a qualified lawyer</strong> for binding contract review.</span>
+      </div>
 
       <div class="input-card">
         <div class="input-card-header">
@@ -130,6 +139,9 @@
         <div class="results-title-group">
           <h2 class="section-title" style="margin-bottom:0">📊 Scan Results</h2>
           <span class="results-subtitle" id="resultsTimestamp"></span>
+          <div class="results-disclaimer">
+            <span>⚖️ <strong>Not legal advice.</strong> These are automated pattern matches — suggestions, not legal conclusions. See a lawyer.</span>
+          </div>
         </div>
         <div class="results-actions">
           <button class="btn btn-sm btn-ghost" onclick="scrollToHighlighted()" title="Scroll to highlights">🎯 Highlights</button>
@@ -201,6 +213,10 @@
         <div class="empty-icon">✅</div>
         <h2>No Red Flags Detected</h2>
         <p>This contract passed our pattern scan. However, we only check for common clause patterns — this is not a substitute for legal review.</p>
+        <div class="disclaimer-banner" style="margin-top:16px;display:inline-flex;text-align:left">
+          <span class="disclaimer-icon">⚖️</span>
+          <span><strong>Important:</strong> A clean scan does not mean a contract is safe, fair, or legally sound. This tool is <strong>not comprehensive</strong> — many important clauses and legal risks cannot be detected by automated pattern matching. Always have contracts reviewed by a licensed attorney.</span>
+        </div>
         <button class="btn btn-primary" onclick="document.getElementById('contractInput').value=''; clearResults();">Try Another Contract</button>
       </div>
     </div>
@@ -245,6 +261,10 @@
         <h3>❓ What this is — and isn't</h3>
         <p><strong>This is:</strong> A pattern-matching tool for spotting common contractual red flags. Think of it like a spell-checker for contracts. It flags known patterns and explains why they matter.</p>
         <p><strong>This isn't:</strong> Legal advice. <strong>ClauseGuard</strong> does not replace a qualified attorney. It helps you know <em>what to ask your lawyer about</em> — and gives you the vocabulary to have that conversation.</p>
+        <div class="disclaimer-banner" style="margin-top:12px;">
+          <span class="disclaimer-icon">⚖️</span>
+          <span><strong>No attorney-client relationship.</strong> Use of this tool does not create an attorney-client relationship. The analysis is based on automated pattern matching only and is <strong>not comprehensive</strong>. It may miss critical issues, flag harmless clauses as risky, or fail to account for jurisdiction-specific laws. <strong>This tool's output is not legally enforceable and should not be relied upon as legal advice.</strong> Always consult a qualified legal professional for contract review tailored to your specific circumstances and jurisdiction.</span>
+        </div>
       </div>
     </div>
   </section>
@@ -261,7 +281,9 @@
         <span class="footer-sep">·</span>
         <span>Built by <a href="https://sarcasticrobot.com" target="_blank" rel="noopener">Sarcastic Robot</a></span>
         <span class="footer-sep">·</span>
-        <span>Not legal advice</span>
+        <span><strong>Not legal advice</strong></span>
+        <span class="footer-sep">·</span>
+        <span>MIT License</span>
       </div>
     </div>
   </footer>

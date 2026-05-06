@@ -4,6 +4,18 @@
 
 [Live Demo](https://aieatassam.github.io/contract-scanner/) (when deployed)
 
+> ⚠️ **IMPORTANT DISCLAIMER**
+>
+> **ClauseGuard is NOT legal advice.** It is an educational pattern-matching tool only.
+>
+> - **No attorney-client relationship** is created by using this tool
+> - **The analysis is NOT comprehensive** — many risks cannot be detected by automated pattern matching
+> - **Findings are suggestions only** and are NOT legally enforceable determinations
+> - **Absence of a flag does NOT mean a contract is safe** — this tool cannot catch everything
+> - **You should ALWAYS consult a qualified, licensed attorney** for contract review tailored to your specific circumstances, jurisdiction, and legal needs
+>
+> This tool helps you know what questions to ask your lawyer — it does not replace one.
+
 ## Features
 
 - **90+ clause patterns** across 26 categories — auto-renewal, indemnification, IP traps, payment terms, non-competes, and more
