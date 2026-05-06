@@ -798,7 +798,7 @@ const RED_FLAG_PATTERNS = [
     id: 'indemnity-survival-perpetual',
     category: 'Indemnification',
     severity: 'critical',
-    label: 'Subcontractor / Agent Indemnity (You're liable for everyone)',
+    label: 'Subcontractor / Agent Indemnity (You are liable for everyone)',
     patterns: [
       /(?:shall\s+)?(?:be\s+)?(?:responsible|liable)\s+(?:for\s+)?(?:any\s+and\s+all|all)\s+(?:acts?\s+or\s+omissions?|conduct|actions?)\s+(?:of\s+)?(?:its?\s+)?(?:employees?|agents?|subcontractors?|representatives?|affiliates?|officers?|directors?)/i,
       /(?:shall\s+)?indemnif(?:y|ication)\s+(?:against|for|from|hold\s+harmless)\s+(?:any\s+)?(?:acts?\s+or\s+omissions?)\s+(?:by|of|on\s+the\s+part\s+of)\s+(?:its?\s+)?(?:personnel|staff|employees?|subcontractors?|agents?|consultants?)/i,

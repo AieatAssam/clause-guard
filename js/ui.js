@@ -1,13 +1,12 @@
 /**
  * ClauseGuard — UI Controller
- * Theme management, scanning, results rendering, library browser
+ * Tab management, scanning, results, library
  */
 const scanner = new ContractScanner();
 
 // ═══ THEME ═══
 function toggleTheme() {
-  const current = document.documentElement.getAttribute('data-theme');
-  const next = current === 'dark' ? 'light' : 'dark';
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
   document.getElementById('themeToggle').textContent = next === 'dark' ? '☀️' : '🌙';
   localStorage.setItem('clauseguard-theme', next);
@@ -24,9 +23,14 @@ function initTheme() {
   }
 }
 
-// ═══ MOBILE NAV ═══
-function toggleMobileNav() {
-  document.getElementById('mobileNav').classList.toggle('active');
+// ═══ TAB SWITCHING ═══
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelector(`.tab-btn[data-tab="${name}"]`).classList.add('active');
+  document.getElementById(`tab-${name}`).classList.add('active');
+  // Scroll to top of content
+  document.querySelector('.main-content').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 // ═══ INPUT ═══
@@ -43,7 +47,7 @@ function updateWordCount() {
   document.getElementById('wordCount').textContent = `${count.toLocaleString()} words`;
 }
 
-// ═══ SAMPLE CONTRACT ═══
+// ═══ SAMPLE ═══
 function loadSample() {
   const sample = `SaaS MASTER SERVICES AGREEMENT
 
@@ -82,94 +86,78 @@ Neither party shall be liable for delays or non-performance caused by events bey
 11. ENTIRE AGREEMENT
 This Agreement constitutes the entire agreement between the parties and supersedes all prior agreements, understandings, negotiations, and discussions, whether oral or written. Customer acknowledges that it has not relied upon any representations or warranties not expressly set forth herein.
 
-12. WAIVER AND SEVERABILITY
-The failure of either party to enforce any provision hereof shall not constitute a waiver of such provision. If any provision is found unenforceable, the remaining provisions shall continue in full force and effect.
-
-13. NO ORAL MODIFICATION
-This Agreement may not be modified except by a written instrument signed by both parties.
-
-14. WARRANTY DISCLAIMER
-THE SERVICES ARE PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.`;
+12. WARRANTY DISCLAIMER
+THE SERVICES ARE PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED.`;
 
   document.getElementById('contractInput').value = sample;
   switchInputTab('paste');
   updateWordCount();
 }
 
-// ═══ MAIN SCAN ═══
+// ═══ SCAN ═══
 function runScan() {
   const text = document.getElementById('contractInput').value.trim();
-  if (!text || text.length < 20) {
-    document.getElementById('contractInput').focus();
-    document.getElementById('contractInput').style.border = '2px solid var(--critical)';
-    setTimeout(() => {
-      document.getElementById('contractInput').style.border = 'none';
-    }, 2000);
-    return;
-  }
+  if (!text || text.length < 20) return;
 
-  // Show progress
+  // Switch to results tab, show progress
+  switchTab('results');
   const progress = document.getElementById('scanProgress');
   const fill = document.getElementById('progressFill');
   const textEl = document.getElementById('progressText');
+  document.getElementById('resultsContent').style.display = 'none';
+  document.getElementById('resultsEmpty').style.display = 'none';
   progress.style.display = 'block';
-  
+
   const stages = [
     { pct: 25, text: 'Tokenizing contract text...' },
     { pct: 50, text: 'Running pattern matching...' },
     { pct: 75, text: 'Analyzing severity levels...' },
     { pct: 90, text: 'Building results...' },
   ];
-
   let si = 0;
-  const progressInterval = setInterval(() => {
-    if (si < stages.length && stages[si]) {
-      fill.style.width = stages[si].pct + '%';
-      textEl.textContent = stages[si].text;
-      si++;
-    }
-  }, 120);
+  const interval = setInterval(() => {
+    if (si < stages.length) { fill.style.width = stages[si].pct + '%'; textEl.textContent = stages[si].text; si++; }
+  }, 100);
 
-  // Run scan (async for UI update)
   setTimeout(() => {
-    clearInterval(progressInterval);
+    clearInterval(interval);
     fill.style.width = '100%';
-    textEl.textContent = '✅ Scan complete!';
+    textEl.textContent = '✅ Complete!';
 
     const results = scanner.scan(text);
 
     setTimeout(() => {
       progress.style.display = 'none';
       fill.style.width = '0%';
+      document.getElementById('tabBtnResults').disabled = false;
+      document.getElementById('tabBtnResults').classList.add('active');
 
       if (results.length === 0) {
-        document.getElementById('results-section').style.display = 'none';
-        document.getElementById('empty-section').style.display = 'block';
-        document.getElementById('empty-section').scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('resultsContent').style.display = 'none';
+        document.getElementById('resultsEmpty').style.display = 'block';
       } else {
-        document.getElementById('empty-section').style.display = 'none';
+        document.getElementById('resultsEmpty').style.display = 'none';
         renderResults(results, text);
         renderAnnotated(text, results);
-        document.getElementById('results-section').style.display = 'block';
-        setTimeout(() => {
-          document.getElementById('results-section').scrollIntoView({ behavior: 'smooth' });
-        }, 100);
+        document.getElementById('resultsContent').style.display = 'block';
       }
-    }, 400);
-  }, 500);
+    }, 300);
+  }, 400);
 }
 
 function clearResults() {
-  document.getElementById('results-section').style.display = 'none';
-  document.getElementById('empty-section').style.display = 'none';
+  document.getElementById('resultsContent').style.display = 'none';
+  document.getElementById('resultsEmpty').style.display = 'none';
   document.getElementById('scanProgress').style.display = 'none';
   document.getElementById('resultsList').innerHTML = '';
   document.getElementById('annotatedContract').innerHTML = '';
   document.getElementById('annotatedWrapper').style.display = 'none';
+  document.getElementById('tabBtnResults').disabled = true;
+  document.getElementById('tabBtnResults').classList.remove('active');
 }
 
 // ═══ RENDER RESULTS ═══
-function renderResults(results, originalText) {
+function renderResults(results, text) {
   const list = document.getElementById('resultsList');
   const stats = scanner.getStats();
 
@@ -181,25 +169,16 @@ function renderResults(results, originalText) {
   document.getElementById('resultsCount').textContent = `${results.length} flags found`;
   document.getElementById('resultsTimestamp').textContent = `Scanned ${new Date().toLocaleTimeString()}`;
 
-  // Color the risk score
-  const riskEl = document.querySelector('.score-risk .score-num');
-  if (stats.riskScore >= 70) riskEl.style.color = 'var(--critical)';
-  else if (stats.riskScore >= 40) riskEl.style.color = 'var(--high)';
-  else riskEl.style.color = 'var(--medium)';
+  const sevColors = { critical: '#e74c3c', high: '#e67e22', medium: '#b8860b', info: '#3498db' };
 
   list.innerHTML = results.map((r, i) => {
-    const severityColors = { critical: '#e74c3c', high: '#e67e22', medium: '#b8860b', info: '#3498db' };
     const riskPct = (r.riskLevel / 10) * 100;
-
     return `
-    <div class="result-card" data-severity="${r.severity}" style="animation-delay:${i * 0.04}s">
+    <div class="result-card" data-severity="${r.severity}" style="animation-delay:${i * 0.03}s">
       <div class="result-card-header" onclick="toggleResult(this.closest('.result-card'))">
-        <div class="result-card-header-left">
+        <div>
           <div class="result-badges">
-            <span class="badge badge-${r.severity}">
-              ${r.severity === 'critical' ? '🔴' : r.severity === 'high' ? '🟠' : r.severity === 'medium' ? '🟡' : '🔵'} 
-              ${r.severity.toUpperCase()}
-            </span>
+            <span class="badge badge-${r.severity}">${r.severity === 'critical' ? '🔴' : r.severity === 'high' ? '🟠' : r.severity === 'medium' ? '🟡' : '🔵'} ${r.severity.toUpperCase()}</span>
             <span class="badge badge-category">${CATEGORY_META[r.category]?.icon || '📌'} ${r.category}</span>
             <span class="badge badge-match">${r.matchCount} match${r.matchCount !== 1 ? 'es' : ''}</span>
           </div>
@@ -220,10 +199,8 @@ function renderResults(results, originalText) {
           <div class="result-section">
             <div class="result-section-label">Risk Level</div>
             <div class="result-risk-meter">
-              <div class="risk-bar">
-                <div class="risk-fill risk-fill-${r.severity}" style="width:${riskPct}%"></div>
-              </div>
-              <span style="font-size:12px;font-weight:600;color:${severityColors[r.severity]}">${r.riskLevel}/10</span>
+              <div class="risk-bar"><div class="risk-fill risk-fill-${r.severity}" style="width:${riskPct}%"></div></div>
+              <span style="font-size:11px;font-weight:600;color:${sevColors[r.severity]}">${r.riskLevel}/10</span>
             </div>
           </div>
           <div class="result-section">
@@ -236,8 +213,8 @@ function renderResults(results, originalText) {
           </div>
           <div class="result-section">
             <div class="result-section-label">Matched Text</div>
-            <div class="result-section-text" style="font-family:var(--font-mono);font-size:12px;background:var(--bg-alt);padding:8px 12px;border-radius:6px;color:var(--text-secondary)">
-              ${r.matches.map(m => `"<span style="color:${severityColors[r.severity]};font-weight:500">${escapeHtml(m.matchedText)}</span>"`).join('<br/><br/>')}
+            <div class="result-section-text" style="font-family:var(--font-mono);font-size:11px;background:var(--bg-alt);padding:8px 10px;border-radius:6px;color:var(--text-secondary)">
+              ${r.matches.map(m => `"<span style="color:${sevColors[r.severity]};font-weight:500">${escapeHtml(m.matchedText)}</span>"`).join('<br/><br/>')}
             </div>
           </div>
         </div>
@@ -246,75 +223,44 @@ function renderResults(results, originalText) {
   }).join('');
 }
 
-// ═══ TOGGLE RESULT EXPAND ═══
-function toggleResult(card) {
-  card.classList.toggle('expanded');
-}
+function toggleResult(card) { card.classList.toggle('expanded'); }
 
-// ═══ RENDER ANNOTATED ═══
+// ═══ ANNOTATED ═══
 function renderAnnotated(text, results) {
   if (!text || results.length === 0) return;
 
-  // Build smarter highlighting — mark exact matched phrases
-  let annotated = escapeHtml(text);
-  
-  // Sort by position, handle nesting
   const ranges = [];
   for (const result of results) {
     for (const match of result.matches) {
-      const para = match.fullText;
-      // Find the matched text position within the full text
-      let searchIdx = 0;
-      let foundIdx;
+      let searchIdx = 0, foundIdx;
       while ((foundIdx = text.indexOf(match.matchedText, searchIdx)) !== -1) {
-        ranges.push({
-          start: foundIdx,
-          end: foundIdx + match.matchedText.length,
-          severity: result.severity,
-          label: result.label,
-        });
+        ranges.push({ start: foundIdx, end: foundIdx + match.matchedText.length, severity: result.severity, label: result.label });
         searchIdx = foundIdx + 1;
       }
     }
   }
-
-  // Sort by start
   ranges.sort((a, b) => a.start - b.start);
 
-  // Merge overlapping ranges (take highest severity)
   const merged = [];
   for (const r of ranges) {
-    if (merged.length === 0) {
-      merged.push(r);
-      continue;
-    }
+    if (merged.length === 0) { merged.push(r); continue; }
     const last = merged[merged.length - 1];
     if (r.start <= last.end) {
-      // Overlap — extend to furthest end, keep highest severity
       last.end = Math.max(last.end, r.end);
-      const sevOrder = { critical: 0, high: 1, medium: 2, info: 3 };
-      if (sevOrder[r.severity] < sevOrder[last.severity]) {
-        last.severity = r.severity;
-      }
+      const ord = { critical: 0, high: 1, medium: 2, info: 3 };
+      if (ord[r.severity] < ord[last.severity]) last.severity = r.severity;
     } else {
       merged.push(r);
     }
   }
 
-  // Build annotated HTML
-  let html = '';
-  let lastIdx = 0;
+  let html = '', lastIdx = 0;
   for (const range of merged) {
-    if (range.start > lastIdx) {
-      html += escapeHtml(text.substring(lastIdx, range.start));
-    }
-    const severityClass = `mark-${range.severity}`;
-    html += `<mark class="${severityClass}" title="${escapeAttr(range.label)} - ${range.severity.toUpperCase()} risk">${escapeHtml(text.substring(range.start, range.end))}</mark>`;
+    if (range.start > lastIdx) html += escapeHtml(text.substring(lastIdx, range.start));
+    html += `<mark class="mark-${range.severity}" title="${escapeAttr(range.label)}">${escapeHtml(text.substring(range.start, range.end))}</mark>`;
     lastIdx = range.end;
   }
-  if (lastIdx < text.length) {
-    html += escapeHtml(text.substring(lastIdx));
-  }
+  if (lastIdx < text.length) html += escapeHtml(text.substring(lastIdx));
 
   document.getElementById('annotatedContract').innerHTML = html;
   document.getElementById('annotatedWrapper').style.display = 'block';
@@ -324,80 +270,53 @@ function renderAnnotated(text, results) {
 function filterResults(severity) {
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   document.querySelector(`.filter-btn[data-filter="${severity}"]`).classList.add('active');
-
   document.querySelectorAll('.result-card').forEach(card => {
-    if (severity === 'all') {
-      card.style.display = '';
-    } else {
-      card.style.display = card.dataset.severity === severity ? '' : 'none';
-    }
+    card.style.display = (severity === 'all' || card.dataset.severity === severity) ? '' : 'none';
   });
-
-  const visible = document.querySelectorAll('.result-card[style*="display: none"]').length === 0 
-    ? document.querySelectorAll('.result-card').length
-    : document.querySelectorAll('.result-card:not([style*="display: none"])').length;
+  const visible = document.querySelectorAll('.result-card:not([style*="display: none"])').length;
   document.getElementById('resultsCount').textContent = `${visible} flag${visible !== 1 ? 's' : ''} found`;
 }
 
-// ═══ SCROLL TO HIGHLIGHTS ═══
-function scrollToHighlighted() {
-  const annotated = document.getElementById('annotatedWrapper');
-  if (annotated.style.display !== 'none') {
-    annotated.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
+function scrollToHighlights() {
+  const w = document.getElementById('annotatedWrapper');
+  if (w.style.display !== 'none') w.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 // ═══ EXPORT ═══
-function exportCSV() {
-  exportResultsCSV(scanner.results);
-}
+function exportCSV() { exportResultsCSV(scanner.results); }
+function exportHTML() { exportResultsHTML(scanner.results, document.getElementById('contractInput').value); }
 
-function exportHTML() {
-  exportResultsHTML(scanner.results, document.getElementById('contractInput').value);
-}
-
-// ═══ HELPERS ═══
 function escapeHtml(str) {
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
+  const d = document.createElement('div'); d.textContent = str; return d.innerHTML;
 }
-
 function escapeAttr(str) {
   return str.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
-// ═══ LIBRARY BROWSER ═══
+// ═══ LIBRARY ═══
 function renderLibrary() {
   const grid = document.getElementById('libraryGrid');
-  const categories = {};
-  
-  for (const pattern of RED_FLAG_PATTERNS) {
-    if (!categories[pattern.category]) {
-      categories[pattern.category] = { count: 0, icon: CATEGORY_META[pattern.category]?.icon || '📌' };
-    }
-    categories[pattern.category].count++;
+  if (!grid) return;
+  const cats = {};
+  for (const p of RED_FLAG_PATTERNS) {
+    if (!cats[p.category]) cats[p.category] = { count: 0, icon: (CATEGORY_META[p.category] || {}).icon || '📌' };
+    cats[p.category].count++;
   }
-
-  grid.innerHTML = Object.entries(categories)
+  grid.innerHTML = Object.entries(cats)
     .sort((a, b) => b[1].count - a[1].count)
     .map(([name, meta]) => `
       <div class="lib-card">
         <div class="lib-card-icon">${meta.icon}</div>
         <div class="lib-card-title">${name}</div>
         <div class="lib-card-count">${meta.count} patterns</div>
-      </div>
-    `).join('');
+      </div>`).join('');
 }
+
+// ═══ KEYBOARD ═══
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); runScan(); }
+});
 
 // ═══ INIT ═══
 initTheme();
 renderLibrary();
-
-// Keyboard shortcut: Ctrl/Cmd + Enter to scan
-document.addEventListener('keydown', (e) => {
-  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-    e.preventDefault();
-    runScan();
-  }
-});

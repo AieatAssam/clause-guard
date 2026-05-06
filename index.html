@@ -14,260 +14,209 @@
   <!-- ═══ ANIMATED BACKGROUND ═══ -->
   <div class="bg-grid"></div>
 
-  <!-- ═══ NAVBAR ═══ -->
-  <nav class="navbar" id="navbar">
-    <div class="nav-inner">
-      <div class="nav-brand">
-        <span class="nav-logo">🛡️</span>
-        <span class="nav-title">ClauseGuard</span>
-        <span class="nav-badge">β</span>
+  <!-- ═══ TOP BAR (compact hero + nav) ═══ -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-brand">
+        <span class="topbar-logo">🛡️</span>
+        <span class="topbar-title">ClauseGuard</span>
+        <span class="topbar-badge">β</span>
       </div>
-      <div class="nav-links">
-        <button class="nav-btn" onclick="document.getElementById('input-section').scrollIntoView({behavior:'smooth'})">Scan</button>
-        <button class="nav-btn" onclick="document.getElementById('library-section').scrollIntoView({behavior:'smooth'})">Library</button>
-        <button class="nav-btn" onclick="document.getElementById('how-section').scrollIntoView({behavior:'smooth'})">How It Works</button>
+      <nav class="topbar-tabs" id="tabBar">
+        <button class="tab-btn active" data-tab="scan" onclick="switchTab('scan')">📝 Scan</button>
+        <button class="tab-btn" data-tab="results" onclick="switchTab('results')" id="tabBtnResults" disabled>📊 Results</button>
+        <button class="tab-btn" data-tab="library" onclick="switchTab('library')">📖 Library</button>
+        <button class="tab-btn" data-tab="about" onclick="switchTab('about')">⚡ About</button>
+      </nav>
+      <div class="topbar-actions">
         <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle theme">🌙</button>
       </div>
-      <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileNav()" aria-label="Menu">☰</button>
     </div>
-    <div class="mobile-nav" id="mobileNav">
-      <button onclick="document.getElementById('input-section').scrollIntoView({behavior:'smooth'}); toggleMobileNav()">Scan</button>
-      <button onclick="document.getElementById('library-section').scrollIntoView({behavior:'smooth'}); toggleMobileNav()">Library</button>
-      <button onclick="document.getElementById('how-section').scrollIntoView({behavior:'smooth'}); toggleMobileNav()">How It Works</button>
-    </div>
-  </nav>
+  </header>
 
-  <!-- ═══ HERO ═══ -->
-  <section class="hero" id="hero">
-    <div class="hero-glow"></div>
-    <div class="hero-content">
-      <div class="hero-tag">🔍 Free · Private · No Data Leaves Your Browser</div>
-      <h1 class="hero-title">
-        Scan any contract<br/>
-        for <span class="gradient-text">red flags</span> in seconds
-      </h1>
-      <p class="hero-sub">
-        <strong>ClauseGuard</strong> analyzes contracts against a library of <strong>90+ red-flag clause patterns</strong> — 
-        auto-renewal traps, broad indemnity, onerous payment terms, and more. 
-        Everything runs in your browser. Nothing is uploaded.
-      </p>
-      <div class="disclaimer-banner hero-disclaimer">
-        <span class="disclaimer-icon">⚖️</span>
-        <span><strong>Not legal advice.</strong> ClauseGuard is an educational pattern-matching tool. It does not provide legal advice, legal opinions, or legal analysis. Its findings are <strong>suggestions only, not legally enforceable determinations</strong>. Always consult a licensed attorney for contract review. This tool is not comprehensive — absence of a flag does not mean a contract is safe.</span>
-      </div>
-      <div class="hero-cta">
-        <button class="btn btn-primary btn-lg" onclick="document.getElementById('input-section').scrollIntoView({behavior:'smooth'})">
-          ⚡ Start Scanning
-        </button>
-        <button class="btn btn-outline btn-lg" onclick="document.getElementById('library-section').scrollIntoView({behavior:'smooth'})">
-          📖 Browse Clause Library
-        </button>
-      </div>
-      <div class="hero-stats">
-        <div class="hero-stat">
-          <span class="hero-stat-num">90+</span>
-          <span class="hero-stat-label">Clause Patterns</span>
+  <!-- ═══ CONTENT = hero + tab panels ═══ -->
+  <main class="main-content">
+
+    <!-- Compact Hero -->
+    <section class="hero-compact">
+      <div class="hero-compact-inner">
+        <div class="hero-compact-text">
+          <h1 class="hero-compact-title">Scan any contract for <span class="gradient-text">red flags</span></h1>
+          <p class="hero-compact-sub">90+ clause patterns · Auto-renewal traps · Broad indemnity · IP traps · Payment terms · Non-competes · <strong>100% private, client-side</strong></p>
         </div>
-        <div class="hero-stat">
-          <span class="hero-stat-num">26</span>
-          <span class="hero-stat-label">Categories</span>
-        </div>
-        <div class="hero-stat">
-          <span class="hero-stat-num">100%</span>
-          <span class="hero-stat-label">Client-Side</span>
+        <div class="disclaimer-banner hero-disclaimer">
+          <span class="disclaimer-icon">⚖️</span>
+          <span><strong>Not legal advice.</strong> This is an educational pattern-matching tool. Findings are <strong>suggestions only</strong>, not legally enforceable determinations. Always consult a qualified attorney. This tool is not comprehensive — absence of a flag does not mean a contract is safe.</span>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ═══ INPUT SECTION ═══ -->
-  <section class="section" id="input-section">
-    <div class="section-inner">
-      <h2 class="section-title">✏️ Paste Your Contract</h2>
-      <p class="section-desc">Paste the full contract text below. Everything stays in your browser — nothing is sent to any server.</p>
+    <!-- ═══ TAB: SCAN ═══ -->
+    <section class="tab-panel active" id="tab-scan">
+      <div class="panel-inner">
+        <div class="disclaimer-banner input-disclaimer">
+          <span class="disclaimer-icon">⚠️</span>
+          <span>This tool is <strong>not a substitute for professional legal advice</strong>. Its analysis is <strong>not comprehensive</strong> and findings are <strong>suggestions only</strong> — they are not legally enforceable. No attorney-client relationship is created. <strong>Consult a qualified lawyer</strong> for binding contract review.</span>
+        </div>
 
-      <div class="disclaimer-banner input-disclaimer">
-        <span class="disclaimer-icon">⚠️</span>
-        <span>This tool is <strong>not a substitute for professional legal advice</strong>. Its analysis is <strong>not comprehensive</strong> and its findings are <strong>suggestions only</strong> — they are not legally enforceable determinations. No attorney-client relationship is created. <strong>Consult a qualified lawyer</strong> for binding contract review.</span>
-      </div>
-
-      <div class="input-card">
-        <div class="input-card-header">
-          <div class="input-card-tabs">
-            <button class="input-tab active" data-tab="paste" onclick="switchInputTab('paste')">📝 Paste Text</button>
-            <button class="input-tab" data-tab="sample" onclick="loadSample()">📋 Load Sample</button>
+        <div class="input-card">
+          <div class="input-card-header">
+            <div class="input-card-tabs">
+              <button class="input-tab active" data-tab="paste" onclick="switchInputTab('paste')">📝 Paste Text</button>
+              <button class="input-tab" data-tab="sample" onclick="loadSample()">📋 Load Sample</button>
+            </div>
+            <div class="input-card-actions">
+              <span class="word-count" id="wordCount">0 words</span>
+              <button class="btn btn-sm btn-ghost" onclick="document.getElementById('contractInput').value=''; clearResults(); updateWordCount();" title="Clear">🗑️</button>
+            </div>
           </div>
-          <div class="input-card-actions">
-            <span class="word-count" id="wordCount">0 words</span>
-            <button class="btn btn-sm btn-ghost" onclick="document.getElementById('contractInput').value=''; clearResults(); updateWordCount();" title="Clear">🗑️</button>
+          <div class="input-tab-content active" id="tab-paste">
+            <textarea id="contractInput" class="contract-input"
+              placeholder="Paste your contract text here...&#10;&#10;For best results, include the entire contract.&#10;Cmd/Ctrl+Enter to scan."
+              oninput="updateWordCount()" spellcheck="false"></textarea>
+          </div>
+          <div class="input-card-footer">
+            <div class="input-hints">
+              <span>💡 <strong>Tip:</strong> Full contracts scan better than snippets · <kbd>⌘/Ctrl+Enter</kbd> to scan</span>
+            </div>
+            <button class="btn btn-primary btn-scan" onclick="runScan()">
+              <span class="btn-icon">🔍</span>
+              <span class="btn-text">Scan for Red Flags</span>
+            </button>
           </div>
         </div>
-        <div class="input-tab-content active" id="tab-paste">
-          <textarea 
-            id="contractInput" 
-            class="contract-input" 
-            placeholder="Paste your contract text here...&#10;&#10;For best results, include the entire contract — or at least a substantial section.&#10;The scanner works best with 1-10 pages of text."
-            oninput="updateWordCount()"
-            spellcheck="false"
-          ></textarea>
-        </div>
-        <div class="input-card-footer">
-          <div class="input-hints">
-            <span>💡 <strong>Tip:</strong> Works best with full contracts, not snippets</span>
-          </div>
-          <button class="btn btn-primary btn-scan" id="scanBtn" onclick="runScan()">
-            <span class="btn-icon">🔍</span>
-            <span class="btn-text">Scan for Red Flags</span>
-          </button>
-        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ═══ LOADING ═══ -->
-  <div class="scan-progress" id="scanProgress" style="display:none">
-    <div class="progress-bar">
-      <div class="progress-fill" id="progressFill"></div>
-    </div>
-    <div class="progress-text" id="progressText">Analyzing clause patterns...</div>
-  </div>
+    <!-- ═══ TAB: RESULTS (hidden until scan) ═══ -->
+    <section class="tab-panel" id="tab-results">
+      <div class="panel-inner">
+        <!-- Progress -->
+        <div class="scan-progress" id="scanProgress" style="display:none">
+          <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+          <div class="progress-text" id="progressText">Analyzing clause patterns...</div>
+        </div>
 
-  <!-- ═══ RESULTS ═══ -->
-  <section class="section" id="results-section" style="display:none">
-    <div class="section-inner">
-      <div class="results-header">
-        <div class="results-title-group">
-          <h2 class="section-title" style="margin-bottom:0">📊 Scan Results</h2>
-          <span class="results-subtitle" id="resultsTimestamp"></span>
+        <!-- Results content -->
+        <div id="resultsContent" style="display:none">
+
+          <div class="results-header">
+            <div class="results-title-group">
+              <h2 class="section-title" style="margin-bottom:0">📊 Results</h2>
+              <span class="results-subtitle" id="resultsTimestamp"></span>
+            </div>
+            <div class="results-actions">
+              <button class="btn btn-sm btn-ghost" onclick="scrollToHighlights()" title="Scroll to highlights">🎯 Highlights</button>
+              <button class="btn btn-sm btn-outline" onclick="exportCSV()">📥 CSV</button>
+              <button class="btn btn-sm btn-outline" onclick="exportHTML()">📄 Report</button>
+            </div>
+          </div>
+
           <div class="results-disclaimer">
-            <span>⚖️ <strong>Not legal advice.</strong> These are automated pattern matches — suggestions, not legal conclusions. See a lawyer.</span>
+            ⚖️ <strong>Not legal advice.</strong> These are automated pattern matches — suggestions, not legal conclusions. Consult a lawyer.
+          </div>
+
+          <!-- Score Dashboard -->
+          <div class="score-dashboard">
+            <div class="score-card score-critical"><div class="score-icon">🔴</div><div class="score-num" id="scoreCritical">0</div><div class="score-label">Critical</div></div>
+            <div class="score-card score-high"><div class="score-icon">🟠</div><div class="score-num" id="scoreHigh">0</div><div class="score-label">High</div></div>
+            <div class="score-card score-medium"><div class="score-icon">🟡</div><div class="score-num" id="scoreMedium">0</div><div class="score-label">Medium</div></div>
+            <div class="score-card score-info"><div class="score-icon">🔵</div><div class="score-num" id="scoreInfo">0</div><div class="score-label">Info</div></div>
+            <div class="score-card score-risk"><div class="score-icon">⚡</div><div class="score-num" id="scoreRisk">0</div><div class="score-label">Risk Score</div></div>
+          </div>
+
+          <!-- Annotated -->
+          <div class="annotated-wrapper" id="annotatedWrapper" style="display:none">
+            <h3 class="annotated-title">📄 Annotated Contract</h3>
+            <div class="annotated-contract" id="annotatedContract"></div>
+            <div class="annotated-legend">
+              <span class="legend-item"><span class="legend-dot" style="background:#e74c3c"></span> Critical</span>
+              <span class="legend-item"><span class="legend-dot" style="background:#e67e22"></span> High</span>
+              <span class="legend-item"><span class="legend-dot" style="background:#f1c40f"></span> Medium</span>
+              <span class="legend-item"><span class="legend-dot" style="background:#3498db"></span> Info</span>
+            </div>
+          </div>
+
+          <!-- Filter bar -->
+          <div class="results-toolbar">
+            <div class="results-filter">
+              <button class="filter-btn active" data-filter="all" onclick="filterResults('all')">All</button>
+              <button class="filter-btn" data-filter="critical" onclick="filterResults('critical')">Critical</button>
+              <button class="filter-btn" data-filter="high" onclick="filterResults('high')">High</button>
+              <button class="filter-btn" data-filter="medium" onclick="filterResults('medium')">Medium</button>
+            </div>
+            <div class="results-count" id="resultsCount">0 flags found</div>
+          </div>
+
+          <div class="results-list" id="resultsList"></div>
+        </div>
+
+        <!-- Empty state -->
+        <div id="resultsEmpty" style="display:none">
+          <div class="empty-state">
+            <div class="empty-icon">✅</div>
+            <h2>No Red Flags Detected</h2>
+            <p>This contract passed our pattern scan — but that doesn't mean it's safe.</p>
+            <div class="disclaimer-banner" style="display:inline-flex;text-align:left;max-width:560px;margin:0 auto">
+              <span class="disclaimer-icon">⚖️</span>
+              <span><strong>Important:</strong> A clean scan does not mean a contract is safe, fair, or legally sound. This tool is <strong>not comprehensive</strong> — many risks cannot be detected by automated pattern matching. Always have contracts reviewed by a licensed attorney.</span>
+            </div>
+            <div style="margin-top:16px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+              <button class="btn btn-primary" onclick="switchTab('scan')">Scan Another</button>
+              <button class="btn btn-outline" onclick="switchTab('library')">Browse Library</button>
+            </div>
           </div>
         </div>
-        <div class="results-actions">
-          <button class="btn btn-sm btn-ghost" onclick="scrollToHighlighted()" title="Scroll to highlights">🎯 Highlights</button>
-          <button class="btn btn-sm btn-outline" onclick="exportCSV()">📥 CSV</button>
-          <button class="btn btn-sm btn-outline" onclick="exportHTML()">📄 Report</button>
+      </div>
+    </section>
+
+    <!-- ═══ TAB: LIBRARY ═══ -->
+    <section class="tab-panel" id="tab-library">
+      <div class="panel-inner">
+        <h2 class="section-title">📖 Clause Pattern Library</h2>
+        <p class="section-desc">Every pattern <strong>ClauseGuard</strong> checks for — 73 detection rules across 26 categories.</p>
+        <div class="library-grid" id="libraryGrid"></div>
+      </div>
+    </section>
+
+    <!-- ═══ TAB: ABOUT ═══ -->
+    <section class="tab-panel" id="tab-about">
+      <div class="panel-inner">
+        <h2 class="section-title">⚡ How It Works</h2>
+
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <h3>Paste or type</h3>
+            <p>Paste any contract text directly into the scanner. No account, no upload, no signup.</p>
+          </div>
+          <div class="step-arrow">→</div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <h3>Pattern matching</h3>
+            <p>Our engine scans against 73+ red-flag patterns covering auto-renewal, indemnification, IP traps, payment terms, and more.</p>
+          </div>
+          <div class="step-arrow">→</div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <h3>Review & export</h3>
+            <p>See highlighted risks ranked by severity. Export as CSV or full HTML report. Always 100% private.</p>
+          </div>
+        </div>
+
+        <div class="faq-card">
+          <h3>❓ What this is — and isn't</h3>
+          <p><strong>This is:</strong> A pattern-matching tool for spotting common contractual red flags. Think of it like a spell-checker for contracts. It flags known patterns and explains why they matter.</p>
+          <p><strong>This isn't:</strong> Legal advice. <strong>ClauseGuard</strong> does not replace a qualified attorney. It helps you know <em>what to ask your lawyer about</em> — and gives you the vocabulary to have that conversation.</p>
+          <div class="disclaimer-banner" style="margin-top:12px;">
+            <span class="disclaimer-icon">⚖️</span>
+            <span><strong>No attorney-client relationship.</strong> Use of this tool does not create an attorney-client relationship. The analysis is based on automated pattern matching only and is <strong>not comprehensive</strong>. It may miss critical issues, flag harmless clauses as risky, or fail to account for jurisdiction-specific laws. <strong>This tool's output is not legally enforceable and should not be relied upon as legal advice.</strong> Always consult a qualified legal professional for contract review tailored to your specific circumstances and jurisdiction.</span>
+          </div>
         </div>
       </div>
+    </section>
 
-      <!-- Score Dashboard -->
-      <div class="score-dashboard" id="scoreDashboard">
-        <div class="score-card score-critical">
-          <div class="score-icon">🔴</div>
-          <div class="score-num" id="scoreCritical">0</div>
-          <div class="score-label">Critical</div>
-        </div>
-        <div class="score-card score-high">
-          <div class="score-icon">🟠</div>
-          <div class="score-num" id="scoreHigh">0</div>
-          <div class="score-label">High</div>
-        </div>
-        <div class="score-card score-medium">
-          <div class="score-icon">🟡</div>
-          <div class="score-num" id="scoreMedium">0</div>
-          <div class="score-label">Medium</div>
-        </div>
-        <div class="score-card score-info">
-          <div class="score-icon">🔵</div>
-          <div class="score-num" id="scoreInfo">0</div>
-          <div class="score-label">Info</div>
-        </div>
-        <div class="score-card score-risk">
-          <div class="score-icon">⚡</div>
-          <div class="score-num" id="scoreRisk">0</div>
-          <div class="score-label">Risk Score</div>
-        </div>
-      </div>
-
-      <!-- Annotated Contract -->
-      <div class="annotated-wrapper" id="annotatedWrapper" style="display:none">
-        <h3 class="annotated-title">📄 Annotated Contract</h3>
-        <div class="annotated-contract" id="annotatedContract"></div>
-        <div class="annotated-legend">
-          <span class="legend-item"><span class="legend-dot" style="background:#e74c3c"></span> Critical</span>
-          <span class="legend-item"><span class="legend-dot" style="background:#e67e22"></span> High</span>
-          <span class="legend-item"><span class="legend-dot" style="background:#f1c40f"></span> Medium</span>
-          <span class="legend-item"><span class="legend-dot" style="background:#3498db"></span> Info</span>
-        </div>
-      </div>
-
-      <!-- Results List -->
-      <div class="results-toolbar">
-        <div class="results-filter">
-          <button class="filter-btn active" data-filter="all" onclick="filterResults('all')">All</button>
-          <button class="filter-btn" data-filter="critical" onclick="filterResults('critical')">Critical</button>
-          <button class="filter-btn" data-filter="high" onclick="filterResults('high')">High</button>
-          <button class="filter-btn" data-filter="medium" onclick="filterResults('medium')">Medium</button>
-        </div>
-        <div class="results-count" id="resultsCount">0 flags found</div>
-      </div>
-
-      <div class="results-list" id="resultsList"></div>
-    </div>
-  </section>
-
-  <!-- ═══ EMPTY STATE ═══ -->
-  <section class="section" id="empty-section" style="display:none">
-    <div class="section-inner">
-      <div class="empty-state">
-        <div class="empty-icon">✅</div>
-        <h2>No Red Flags Detected</h2>
-        <p>This contract passed our pattern scan. However, we only check for common clause patterns — this is not a substitute for legal review.</p>
-        <div class="disclaimer-banner" style="margin-top:16px;display:inline-flex;text-align:left">
-          <span class="disclaimer-icon">⚖️</span>
-          <span><strong>Important:</strong> A clean scan does not mean a contract is safe, fair, or legally sound. This tool is <strong>not comprehensive</strong> — many important clauses and legal risks cannot be detected by automated pattern matching. Always have contracts reviewed by a licensed attorney.</span>
-        </div>
-        <button class="btn btn-primary" onclick="document.getElementById('contractInput').value=''; clearResults();">Try Another Contract</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══ LIBRARY SECTION ═══ -->
-  <section class="section" id="library-section">
-    <div class="section-inner">
-      <h2 class="section-title">📖 Clause Pattern Library</h2>
-      <p class="section-desc">Every pattern <strong>ClauseGuard</strong> checks for. We maintain a curated library of 90+ red-flag clause patterns across 26 categories — sourced from legal expertise and common contract traps.</p>
-
-      <div class="library-grid" id="libraryGrid"></div>
-    </div>
-  </section>
-
-  <!-- ═══ HOW IT WORKS ═══ -->
-  <section class="section" id="how-section" style="background: var(--surface-card);">
-    <div class="section-inner">
-      <h2 class="section-title">⚡ How It Works</h2>
-      
-      <div class="steps">
-        <div class="step">
-          <div class="step-num">1</div>
-          <h3>Paste or type</h3>
-          <p>Paste any contract text directly into the scanner. No account, no upload, no signup.</p>
-        </div>
-        <div class="step-arrow">→</div>
-        <div class="step">
-          <div class="step-num">2</div>
-          <h3>Pattern matching</h3>
-          <p>Our engine scans against 90+ red-flag patterns covering auto-renewal, indemnification, IP traps, payment terms, and more.</p>
-        </div>
-        <div class="step-arrow">→</div>
-        <div class="step">
-          <div class="step-num">3</div>
-          <h3>Review & export</h3>
-          <p>See highlighted risks ranked by severity. Export as CSV or full HTML report. Always 100% private.</p>
-        </div>
-      </div>
-
-      <div class="faq-card">
-        <h3>❓ What this is — and isn't</h3>
-        <p><strong>This is:</strong> A pattern-matching tool for spotting common contractual red flags. Think of it like a spell-checker for contracts. It flags known patterns and explains why they matter.</p>
-        <p><strong>This isn't:</strong> Legal advice. <strong>ClauseGuard</strong> does not replace a qualified attorney. It helps you know <em>what to ask your lawyer about</em> — and gives you the vocabulary to have that conversation.</p>
-        <div class="disclaimer-banner" style="margin-top:12px;">
-          <span class="disclaimer-icon">⚖️</span>
-          <span><strong>No attorney-client relationship.</strong> Use of this tool does not create an attorney-client relationship. The analysis is based on automated pattern matching only and is <strong>not comprehensive</strong>. It may miss critical issues, flag harmless clauses as risky, or fail to account for jurisdiction-specific laws. <strong>This tool's output is not legally enforceable and should not be relied upon as legal advice.</strong> Always consult a qualified legal professional for contract review tailored to your specific circumstances and jurisdiction.</span>
-        </div>
-      </div>
-    </div>
-  </section>
+  </main>
 
   <!-- ═══ FOOTER ═══ -->
   <footer class="footer">
@@ -277,7 +226,7 @@
         <span class="footer-tag">Free · Private · Open Source</span>
       </div>
       <div class="footer-links">
-        <a href="https://github.com/AieatAssam/contract-scanner" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/AieatAssam/clause-guard" target="_blank" rel="noopener">GitHub</a>
         <span class="footer-sep">·</span>
         <span>Built by <a href="https://sarcasticrobot.com" target="_blank" rel="noopener">Sarcastic Robot</a></span>
         <span class="footer-sep">·</span>
