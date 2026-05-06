@@ -294,22 +294,53 @@ function escapeAttr(str) {
 }
 
 // ═══ LIBRARY ═══
+let patternCache = null;
+
 function renderLibrary() {
   const grid = document.getElementById('libraryGrid');
   if (!grid) return;
-  const cats = {};
-  for (const p of RED_FLAG_PATTERNS) {
-    if (!cats[p.category]) cats[p.category] = { count: 0, icon: (CATEGORY_META[p.category] || {}).icon || '📌' };
-    cats[p.category].count++;
+  if (!patternCache) {
+    const cats = {};
+    for (const p of RED_FLAG_PATTERNS) {
+      if (!cats[p.category]) cats[p.category] = { count: 0, icon: (CATEGORY_META[p.category] || {}).icon || '📌', items: [] };
+      cats[p.category].count++;
+      cats[p.category].items.push(p);
+    }
+    patternCache = Object.entries(cats).sort((a, b) => b[1].count - a[1].count);
   }
-  grid.innerHTML = Object.entries(cats)
-    .sort((a, b) => b[1].count - a[1].count)
-    .map(([name, meta]) => `
-      <div class="lib-card">
-        <div class="lib-card-icon">${meta.icon}</div>
-        <div class="lib-card-title">${name}</div>
-        <div class="lib-card-count">${meta.count} patterns</div>
-      </div>`).join('');
+  grid.innerHTML = patternCache.map(([name, meta]) => `
+    <div class="lib-card" onclick="showLibraryCategory('${escapeAttr(name)}')">
+      <div class="lib-card-icon">${meta.icon}</div>
+      <div class="lib-card-title">${escapeHtml(name)}</div>
+      <div class="lib-card-count">${meta.count} patterns</div>
+    </div>`).join('');
+}
+
+function showLibraryCategory(name) {
+  const detail = document.getElementById('libraryDetail');
+  const entry = patternCache.find(e => e[0] === name);
+  if (!entry) return;
+  const [catName, meta] = entry;
+  sevIcon = { critical: '🔴', high: '🟠', medium: '🟡', info: '🔵' };
+  sevClass = { critical: 'badge-critical', high: 'badge-high', medium: 'badge-medium', info: 'badge-info' };
+  detail.innerHTML = `
+    <div class="lib-detail-header">
+      <span>${meta.icon} ${escapeHtml(catName)} — ${meta.count} pattern${meta.count !== 1 ? 's' : ''}</span>
+      <button class="lib-detail-close" onclick="closeLibraryDetail()">✕</button>
+    </div>
+    <div class="lib-detail-list">
+      ${meta.items.map(p => `
+        <div class="lib-detail-item">
+          <span class="badge ${sevClass[p.severity]}">${sevIcon[p.severity]} ${p.severity.toUpperCase()}</span>
+          <span class="lib-detail-item-text">${escapeHtml(p.label)}</span>
+        </div>`).join('')}
+    </div>`;
+  detail.style.display = 'block';
+  detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function closeLibraryDetail() {
+  document.getElementById('libraryDetail').style.display = 'none';
 }
 
 // ═══ KEYBOARD ═══
