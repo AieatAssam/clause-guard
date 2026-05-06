@@ -1,8 +1,14 @@
 # 🛡️ ClauseGuard — Contract Red-Flag Scanner
 
-**Paste any contract. Scan for 90+ red-flag clause patterns. 100% client-side. Zero data leaves your browser.**
+**Paste any contract. Scan for 39 red-flag clause patterns across 15 categories. 100% client-side. Zero data leaves your browser.**
 
-[Live Demo](https://aieatassam.github.io/contract-scanner/) (when deployed)
+**[→ Live Demo](https://aieatassam.github.io/clause-guard/)**
+
+![ClauseGuard screenshot](screenshot-main.png)
+
+*Click **Load Sample** to try with real contracts from Adobe, Airbnb, Uber, Amazon, Apple, and Netflix.*
+
+![Sample contracts](screenshot-samples.png)
 
 > ⚠️ **IMPORTANT DISCLAIMER**
 >
@@ -18,7 +24,7 @@
 
 ## Features
 
-- **90+ clause patterns** across 26 categories — auto-renewal, indemnification, IP traps, payment terms, non-competes, and more
+- **39 specific clause patterns** across 15 categories — auto-renewal, indemnification, IP traps, payment terms, non-competes, and more
 - **Severity-ranked results** — critical, high, medium, info
 - **Annotated contract view** — see highlights inline
 - **Export** — CSV summary or full HTML report
@@ -31,14 +37,14 @@
 
 | Category | Patterns | Category | Patterns |
 |---|---|---|---|
-| Auto-Renewal | 2 | Indemnification | 4 |
-| Limitation of Liability | 3 | Assignment | 2 |
-| Dispute Resolution | 6 | Termination | 5 |
-| Payment Terms | 6 | Intellectual Property | 5 |
-| Confidentiality | 7 | Non-Compete / Non-Solicit | 3 |
-| Warranties | 2 | Force Majeure | 2 |
+| Auto-Renewal | 2 | Indemnification | 3 |
+| Limitation of Liability | 2 | Assignment | 1 |
+| Dispute Resolution | 3 | Termination | 3 |
+| Payment Terms | 3 | Intellectual Property | 2 |
+| Confidentiality | 2 | Non-Compete / Non-Solicit | 2 |
+| Warranties | 1 | Force Majeure | 1 |
 | Survival | 1 | Audit Rights | 1 |
-| Miscellaneous | 18 | | |
+| Miscellaneous | 12 | | |
 
 ## Quick Start
 
