@@ -99,7 +99,7 @@ jobs:
 ## How It Works
 
 1. **Paste** your contract text into the scanner
-2. **Pattern matching** runs against 90+ regex patterns organized by clause type
+2. **Pattern matching** runs against 39 targeted regex patterns across 15 categories
 3. **Results** are ranked by severity with explanations, risk levels, and suggested fixes
 4. **Export** findings as CSV or HTML for your records
 
