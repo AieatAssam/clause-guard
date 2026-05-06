@@ -641,3 +641,22 @@ const RED_FLAG_PATTERNS = [
     riskLevel: 5,
   },
 ];
+
+
+const CATEGORY_META = {
+  'Auto-Renewal': { icon: '🔄', color: '#e74c3c', description: 'Clauses that automatically extend the contract' },
+  'Indemnification': { icon: '🛡️', color: '#e74c3c', description: 'Clauses that make you pay for losses' },
+  'Limitation of Liability': { icon: '⚖️', color: '#f39c12', description: 'Clauses that cap or limit damages' },
+  'Assignment': { icon: '📋', color: '#e67e22', description: 'Clauses about transferring the contract' },
+  'Dispute Resolution': { icon: '⚡', color: '#e74c3c', description: 'Clauses about how disputes are handled' },
+  'Termination': { icon: '✂️', color: '#e74c3c', description: 'Clauses about ending the agreement' },
+  'Payment Terms': { icon: '💰', color: '#f39c12', description: 'Clauses about payment timing and amounts' },
+  'Intellectual Property': { icon: '©️', color: '#e74c3c', description: 'Clauses about who owns what' },
+  'Confidentiality': { icon: '🔒', color: '#2980b9', description: 'Clauses about handling sensitive info' },
+  'Non-Compete / Non-Solicit': { icon: '🚫', color: '#e74c3c', description: 'Clauses about competitive activities' },
+  'Warranties': { icon: '📦', color: '#27ae60', description: 'Clauses about guarantees and promises' },
+  'Force Majeure': { icon: '🌪️', color: '#8e44ad', description: 'Clauses about unforeseen events' },
+  'Survival': { icon: '⏳', color: '#7f8c8d', description: 'Clauses about post-termination obligations' },
+  'Audit Rights': { icon: '🔍', color: '#e67e22', description: 'Clauses about inspection and audit' },
+  'Miscellaneous': { icon: '📌', color: '#95a5a6', description: 'Other notable clause types' },
+};
