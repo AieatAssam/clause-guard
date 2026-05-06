@@ -599,20 +599,109 @@ body {
 
 /* ═══ RESPONSIVE ═══ */
 @media (max-width: 768px) {
-  .topbar-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; gap: 0; }
-  .tab-btn { padding: 8px 10px; font-size: 12px; }
-  .score-dashboard { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .topbar { height: auto; min-height: 48px; }
+  .topbar-inner { gap: 6px; padding: 0 8px; flex-wrap: nowrap; }
+  .topbar-title { font-size: 14px; }
+  .topbar-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; gap: 0; scrollbar-width: none; }
+  .topbar-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn { padding: 6px 8px; font-size: 11px; white-space: nowrap; flex-shrink: 0; }
+  
+  .main-content { padding-top: 48px; }
+  .hero-compact { padding: 16px 8px 4px; }
+  .hero-compact-title { font-size: 18px; }
+  .hero-compact-sub { font-size: 12px; }
+  .hero-compact-inner { padding: 0; }
+  
+  .tab-panel { padding: 4px 8px 24px; }
+  .panel-inner { padding: 0; }
+  
+  .section-title { font-size: 18px; }
+  .section-desc { font-size: 13px; }
+  
+  .disclaimer-banner { font-size: 11px; padding: 8px 10px; }
+  
+  .contract-input { min-height: 200px; font-size: 12px; padding: 10px; }
+  .input-card-header { padding: 8px 10px; flex-wrap: wrap; gap: 4px; }
+  .input-tab { padding: 4px 8px; font-size: 11px; }
+  .input-card-footer { padding: 8px 10px; flex-direction: column; align-items: stretch; }
+  .input-hints { font-size: 10px; }
+  .btn-scan { width: 100%; justify-content: center; padding: 12px 16px; }
+  
+  .sample-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; padding: 10px; }
+  .sample-card { padding: 10px; }
+  .sample-card-icon { font-size: 22px; }
+  .sample-card-name { font-size: 11px; }
+  .sample-card-desc { font-size: 10px; }
+  .sample-tag { font-size: 8px; padding: 1px 4px; }
+  
+  .score-dashboard { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+  .score-card { padding: 8px 4px; min-width: 0; }
+  .score-icon { font-size: 14px; }
+  .score-num { font-size: 18px; }
+  .score-label { font-size: 10px; }
   .score-risk { grid-column: 1 / -1; }
-  .steps { flex-direction: column; }
+  
+  .results-header { flex-direction: column; gap: 4px; }
+  .results-actions { width: 100%; justify-content: flex-end; }
+  .results-toolbar { flex-direction: column; align-items: stretch; gap: 4px; }
+  .results-filter { justify-content: center; }
+  .filter-btn { padding: 4px 10px; font-size: 10px; }
+  
+  .result-card-header { padding: 10px 12px; }
+  .result-title { font-size: 13px; }
+  .badge { font-size: 9px; padding: 1px 5px; }
+  .result-card-body { padding: 0 12px 10px; }
+  .result-section-text { font-size: 11px; }
+  .risk-bar { height: 4px; }
+  
+  .annotated-contract { font-size: 11px; padding: 10px; max-height: 300px; }
+  .annotated-title { font-size: 12px; padding: 8px 12px; }
+  .annotated-contract mark { padding: 0 1px; }
+  .annotated-legend { font-size: 10px; padding: 6px 12px; gap: 8px; }
+  
+  .library-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+  .lib-card { padding: 8px; }
+  .lib-card-icon { font-size: 14px; }
+  .lib-card-title { font-size: 11px; }
+  .lib-card-count { font-size: 10px; }
+  .lib-detail-header { padding: 8px 12px; font-size: 12px; }
+  .lib-detail-item { padding: 6px 8px; font-size: 11px; }
+  
+  .steps { flex-direction: column; gap: 8px; }
+  .step { padding: 14px; }
   .step-arrow { display: none; }
-  .library-grid { grid-template-columns: repeat(2, 1fr); }
-  .footer-inner { flex-direction: column; text-align: center; }
+  .step h3 { font-size: 13px; }
+  .step p { font-size: 11px; }
+  
+  .faq-card { padding: 14px; }
+  .faq-card h3 { font-size: 14px; }
+  .faq-card p { font-size: 12px; }
+  
+  .footer { padding: 16px 8px; }
+  .footer-inner { flex-direction: column; text-align: center; gap: 4px; }
+  .footer-links { font-size: 11px; }
+  
+  .btn { padding: 6px 12px; font-size: 12px; }
+  .btn-sm { padding: 5px 8px; font-size: 11px; }
+  .btn-lg { padding: 10px 20px; font-size: 13px; }
+  
+  .empty-state { padding: 24px 8px; }
+  .empty-icon { font-size: 32px; }
+  .empty-state h2 { font-size: 17px; }
 }
 
 @media (max-width: 480px) {
+  .topbar-inner { gap: 4px; }
   .topbar-title { display: none; }
-  .input-card-footer { flex-direction: column; align-items: stretch; }
-  .btn-scan { width: 100%; justify-content: center; }
+  .topbar-logo { font-size: 18px; }
+  .tab-btn { padding: 5px 6px; font-size: 10px; }
+  
+  .sample-grid { grid-template-columns: 1fr; }
+  .library-grid { grid-template-columns: 1fr; }
+  .score-dashboard { grid-template-columns: repeat(2, 1fr); }
+  .score-risk { grid-column: 1 / -1; }
+  .hero-compact-title { font-size: 16px; }
+  .contract-input { min-height: 160px; }
 }
 
 /* ═══ SCROLLBAR ═══ */
